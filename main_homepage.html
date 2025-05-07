@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeShare - Share, Discover, Cook</title>
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #5AB963;
+            --secondary-color: #388E3C;
+            --accent-color: #FF5722;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .auth-buttons a {
+            margin-left: 15px;
+            text-decoration: none;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background-color: #2d2d2d;
+            color: white;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-text {
+            flex: 1;
+            padding: 60px 30px 60px 0;
+            z-index: 2;
+        }
+        
+        .hero-image {
+            flex: 1;
+            text-align: right;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        /* Featured Section */
+        .featured {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 32px;
+            color: var(--dark-gray);
+        }
+        
+        .recipe-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .recipe-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .recipe-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .premium-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .recipe-details {
+            padding: 20px;
+        }
+        
+        .recipe-details h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .recipe-desc {
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        /* Categories Section */
+        .categories {
+            padding: 60px 0;
+            background-color: var(--light-gray);
+        }
+        
+        .category-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .category-card {
+            position: relative;
+            height: 180px;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .category-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            padding: 20px 15px;
+            color: white;
+        }
+        
+        .category-overlay h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        /* Call to Action */
+        .cta {
+            padding: 60px 0;
+            text-align: center;
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .cta h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn-cta {
+            background-color: white;
+            color: var(--primary-color);
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-cta:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        /* Premium Section */
+        .premium-section {
+            padding: 60px 0;
+            background-color: white;
+        }
+        
+        .premium-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .premium-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+        
+        .premium-text h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+        }
+        
+        .premium-text p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .premium-features {
+            margin-bottom: 30px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .feature-icon {
+            background-color: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+        
+        .premium-image {
+            flex: 1;
+        }
+        
+        .premium-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-gray);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .footer-desc {
+            margin-bottom: 20px;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+        
+        .footer-social a {
+            color: white;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .footer-links h4 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .form-checkbox input {
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 991px) {
+            .hero-content {
+                flex-direction: column;
+            }
+            
+            .hero-text, .hero-image {
+                width: 100%;
+                padding: 30px 0;
+            }
+            
+            .recipes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .category-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .premium-content {
+                flex-direction: column;
+            }
+            
+            .premium-text {
+                padding-right: 0;
+                margin-bottom: 30px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .recipes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">RecipeShare</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="recipes.html">Recipes</a></li>
+                    <li><a href="categories.html">Categories</a></li>
+                    <li><a href="premium.html">Premium</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="#" class="btn btn-outline" id="loginBtn">Login</a>
+                    <a href="#" class="btn btn-primary" id="signupBtn">Sign Up</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Share Your Culinary Creations With The World</h1>
+                    <p>Discover, create, and share amazing recipes from around the globe. Join our community of food enthusiasts today!</p>
+                    <a href="#" class="btn btn-primary" id="exploreBtn">Explore Recipes</a>
+                </div>
+                <div class="hero-image">
+                    <img src="/api/placeholder/600/400" alt="Delicious food spread">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Recipes -->
+    <section class="featured">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Recipes</h2>
+            </div>
+            <div class="recipes-grid">
+                <!-- Recipe Card 1 -->
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <img src="/api/placeholder/400/300" alt="Mediterranean Salad">
+                        <div class="premium-badge">Premium</div>
+                    </div>
+                    <div class="recipe-details">
+                        <h3>Mediterranean Salad Bowl</h3>
+                        <div class="recipe-meta">
+                            <span>30 mins</span>
+                            <span>Vegetarian</span>
+                        </div>
+                        <p class="recipe-desc">Fresh vegetables, feta cheese, and olives tossed in a zesty lemon dressing. Perfect for a healthy lunch.</p>
+                        <button class="btn btn-primary">View Recipe</button>
+                    </div>
+                </div>
+                
+                <!-- Recipe Card 2 -->
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <img src="/api/placeholder/400/300" alt="Grilled Salmon">
+                    </div>
+                    <div class="recipe-details">
+                        <h3>Lemon Herb Grilled Salmon</h3>
+                        <div class="recipe-meta">
+                            <span>25 mins</span>
+                            <span>Gluten-Free</span>
+                        </div>
+                        <p class="recipe-desc">Perfectly grilled salmon with a refreshing lemon herb marinade. High in protein and omega-3 fatty acids.</p>
+                        <button class="btn btn-primary">View Recipe</button>
+                    </div>
+                </div>
+                
+                <!-- Recipe Card 3 -->
+                <div class="recipe-card">
+                    <div class="recipe-image">
+                        <img src="/api/placeholder/400/300" alt="Vegetable Pasta">
+                    </div>
+                    <div class="recipe-details">
+                        <h3>Creamy Vegetable Pasta</h3>
+                        <div class="recipe-meta">
+                            <span>40 mins</span>
+                            <span>Vegetarian</span>
+                        </div>
+                        <p class="recipe-desc">Pasta tossed with seasonal vegetables in a light creamy sauce. A comforting meal for any day of the week.</p>
+                        <button class="btn btn-primary">View Recipe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories">
+        <div class="container">
+            <div class="section-title">
+                <h2>Browse Categories</h2>
+            </div>
+            <div class="category-cards">
+                <!-- Category 1 -->
+                <div class="category-card">
+                    <img src="/api/placeholder/300/200" alt="Breakfast">
+                    <div class="category-overlay">
+                        <h3>Breakfast</h3>
+                        <span>45 Recipes</span>
+                    </div>
+                </div>
+                
+                <!-- Category 2 -->
+                <div class="category-card">
+                    <img src="/api/placeholder/300/200" alt="Healthy Bowls">
+                    <div class="category-overlay">
+                        <h3>Healthy Bowls</h3>
+                        <span>32 Recipes</span>
+                    </div>
+                </div>
+                
+                <!-- Category 3 -->
+                <div class="category-card">
+                    <img src="/api/placeholder/300/200" alt="Quick Meals">
+                    <div class="category-overlay">
+                        <h3>Quick Meals</h3>
+                        <span>28 Recipes</span>
+                    </div>
+                </div>
+                
+                <!-- Category 4 -->
+                <div class="category-card">
+                    <img src="/api/placeholder/300/200" alt="Desserts">
+                    <div class="category-overlay">
+                        <h3>Desserts</h3>
+                        <span>51 Recipes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="container">
+            <h2>Share Your Recipes</h2>
+            <p>Got a delicious recipe that you want to share with our community? Upload it now and let others enjoy your culinary creation!</p>
+            <button class="btn-cta" id="uploadRecipeBtn">Upload Recipe</button>
+        </div>
+    </section>
+
+    <!-- Premium Section -->
+    <section class="premium-section">
+        <div class="container">
+            <div class="premium-content">
+                <div class="premium-text">
+                    <h2>Upgrade to Premium</h2>
+                    <p>Get access to exclusive recipes, advanced cooking techniques, and premium features to enhance your cooking experience.</p>
+                    
+                    <div class="premium-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>Access to 500+ exclusive premium recipes</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>Ad-free browsing experience</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>Create and save meal plans</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>Priority customer support</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary">Go Premium</button>
+                </div>
+                <div class="premium-image">
+                    <img src="/api/placeholder/500/400" alt="Premium cooking experience">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">RecipeShare</div>
+                    <p class="footer-desc">Your go-to platform for discovering, sharing, and enjoying delicious recipes from around the world.</p>
+                    <div class="footer-social">
+                        <a href="#"><span>FB</span></a>
+                        <a href="#"><span>TW</span></a>
+                        <a href="#"><span>IG</span></a>
+                        <a href="#"><span>PT</span></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Recipes</a></li>
+                        <li><a href="#">Categories</a></li>
+                        <li><a href="#">Premium</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#">Our Chefs</a></li>
+                        <li><a href="#">Featured Users</a></li>
+                        <li><a href="#">Recipe of the Week</a></li>
+                        <li><a href="#">Cooking Tips</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 RecipeShare. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Log In</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <div class="form-checkbox">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Log In</button>
+                <p style="text-align: center; margin-top: 15px;">Don't have an account? <a href="#" id="switchToSignup">Sign Up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Create Account</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" class="form-control" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" class="form-control" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirmPassword">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" class="form-control" placeholder="Confirm your password" required>
+                </div>
+                <div class="form-checkbox">
+                    <input type="checkbox" id="agreeTerms" required>
+                    <label for="agreeTerms">I agree to the Terms and Conditions</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                <p style="text-align: center; margin-top: 15px;">Already have an account? <a href="#" id="switchToLogin">Log In</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Recipe Modal -->
+    <div class="modal" id="uploadRecipeModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Upload Your Recipe</h2>
+            <form id="recipeForm">
+                <div class="form-group">
+                    <label for="recipeTitle">Recipe Title</label>
+                    <input type="text" id="recipeTitle" class="form-control" placeholder="Enter recipe title" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipeCategory">Category</label>
+                    <select id="recipeCategory" class="form-control" required>
+                        <option value="">Select a category</option>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="dinner">Dinner</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="snack">Snack</option>
+                        <option value="beverage">Beverage</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="prepTime">Preparation Time (minutes)</label>
+                    <input type="number" id="prepTime" class="form-control" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="cookTime">Cooking Time (minutes)</label>
+                    <input type="number" id="cookTime" class="form-control" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipeIngredients">Ingredients</label>
+                    <textarea id="recipeIngredients" class="form-control" rows="5" placeholder="Enter ingredients (one per line)" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="recipeInstructions">Instructions</label>
+                    <textarea id="recipeInstructions" class="form-control" rows="8" placeholder="Enter step-by-step instructions" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="recipeImage">Recipe Image</label>
+                    <input type="file" id="recipeImage" class="form-control" accept="image/*">
+                </div>
+                <div class="form-checkbox">
+                    <input type="checkbox" id="premiumRecipe">
+                    <label for="premiumRecipe">Make this a premium recipe</label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Upload Recipe</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const uploadRecipeBtn = document.getElementById('uploadRecipeBtn');
+        
+        const loginModal = document.getElementById('loginModal');
+        const signupModal = document.getElementById('signupModal');
+        const uploadRecipeModal = document.getElementById('uploadRecipeModal');
+        
+        const switchToSignup = document.getElementById('switchToSignup');
+        const switchToLogin = document.getElementById('switchToLogin');
+        
+        const closeButtons = document.querySelectorAll('.close-modal');
+        
+        // Open modals
+        loginBtn.addEventListener('click', function() {
+    loginModal.style.display = 'block';
+});
+
+signupBtn.addEventListener('click', function() {
+    signupModal.style.display = 'block';
+});
+
+uploadRecipeBtn.addEventListener('click', function() {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn) {
+        uploadRecipeModal.style.display = 'block';
+    } else {
+        loginModal.style.display = 'block';
+        alert('Please login to upload a recipe');
+    }
+});
+
+// Switch between modals
+switchToSignup.addEventListener('click', function(e) {
+    e.preventDefault();
+    loginModal.style.display = 'none';
+    signupModal.style.display = 'block';
+});
+
+switchToLogin.addEventListener('click', function(e) {
+    e.preventDefault();
+    signupModal.style.display = 'none';
+    loginModal.style.display = 'block';
+});
+
+// Close modals
+closeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        loginModal.style.display = 'none';
+        signupModal.style.display = 'none';
+        uploadRecipeModal.style.display = 'none';
+    });
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    if (event.target === loginModal) {
+        loginModal.style.display = 'none';
+    }
+    if (event.target === signupModal) {
+        signupModal.style.display = 'none';
+    }
+    if (event.target === uploadRecipeModal) {
+        uploadRecipeModal.style.display = 'none';
+    }
+});
+
+// Form submissions
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    // For demo purposes - in real app, would verify with database
+    loginUser(email, password);
+});
+
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('signupConfirmPassword').value;
+    
+    if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+    }
+    
+    // For demo purposes - in real app, would save to database
+    registerUser(name, email, password);
+});
+
+document.getElementById('recipeForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const title = document.getElementById('recipeTitle').value;
+    const category = document.getElementById('recipeCategory').value;
+    const prepTime = document.getElementById('prepTime').value;
+    const cookTime = document.getElementById('cookTime').value;
+    const ingredients = document.getElementById('recipeIngredients').value;
+    const instructions = document.getElementById('recipeInstructions').value;
+    const isPremium = document.getElementById('premiumRecipe').checked;
+    
+    // For demo purposes - in real app, would save to database
+    uploadRecipe(title, category, prepTime, cookTime, ingredients, instructions, isPremium);
+});
+
+// Database operations (simulated for frontend demo)
+function loginUser(email, password) {
+    // In a real app, this would make an API call to your backend
+    // For now, we'll simulate successful login
+    console.log('Logging in user:', email);
+    
+    // Simulate API response
+    const userData = {
+        id: 'user123',
+        name: 'Demo User',
+        email: email,
+        premiumMember: false
+    };
+    
+    // Store user data in localStorage (temporary solution)
+    localStorage.setItem('currentUser', JSON.stringify(userData));
+    localStorage.setItem('isLoggedIn', 'true');
+    
+    alert('Login successful!');
+    loginModal.style.display = 'none';
+    
+    // Update UI to show logged in state
+    updateUIForLoggedInUser(userData);
+}
+
+function registerUser(name, email, password) {
+    // In a real app, this would make an API call to your backend
+    console.log('Registering user:', name, email);
+    
+    // Simulate API response
+    const userData = {
+        id: 'user' + Math.floor(Math.random() * 1000),
+        name: name,
+        email: email,
+        premiumMember: false
+    };
+    
+    // Store user data in localStorage (temporary solution)
+    localStorage.setItem('currentUser', JSON.stringify(userData));
+    localStorage.setItem('isLoggedIn', 'true');
+    
+    alert('Registration successful!');
+    signupModal.style.display = 'none';
+    
+    // Update UI to show logged in state
+    updateUIForLoggedInUser(userData);
+}
+
+function uploadRecipe(title, category, prepTime, cookTime, ingredients, instructions, isPremium) {
+    // Get current user
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    
+    if (!currentUser) {
+        alert('You must be logged in to upload recipes');
+        return;
+    }
+    
+    // Check if premium recipe by non-premium user
+    if (isPremium && !currentUser.premiumMember) {
+        alert('You need a premium membership to create premium recipes');
+        return;
+    }
+    
+    // In a real app, this would make an API call to your backend
+    console.log('Uploading recipe:', title, category, isPremium);
+    
+    // Simulate recipe upload
+    const recipeData = {
+        id: 'recipe' + Math.floor(Math.random() * 1000),
+        title: title,
+        category: category,
+        prepTime: prepTime,
+        cookTime: cookTime,
+        ingredients: ingredients.split('\n'),
+        instructions: instructions,
+        author: currentUser.name,
+        authorId: currentUser.id,
+        isPremium: isPremium,
+        dateCreated: new Date().toISOString()
+    };
+    
+    // Store recipe in localStorage for demo purposes
+    let userRecipes = JSON.parse(localStorage.getItem('userRecipes')) || [];
+    userRecipes.push(recipeData);
+    localStorage.setItem('userRecipes', JSON.stringify(userRecipes));
+    
+    alert('Recipe uploaded successfully!');
+    uploadRecipeModal.style.display = 'none';
+    
+    // Reset form
+    document.getElementById('recipeForm').reset();
+}
+
+function updateUIForLoggedInUser(userData) {
+    const authButtons = document.querySelector('.auth-buttons');
+    authButtons.innerHTML = `
+        <span style="margin-right: 15px;">Welcome, ${userData.name}</span>
+        <a href="#" class="btn btn-outline" id="logoutBtn">Logout</a>
+    `;
+    
+    // Add logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('isLoggedIn');
+        window.location.reload();
+    });
+}
+
+// Check if user is already logged in (on page load)
+window.addEventListener('DOMContentLoaded', function() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn) {
+        const userData = JSON.parse(localStorage.getItem('currentUser'));
+        updateUIForLoggedInUser(userData);
+    }
+});
+
+// Premium Recipe Purchase functionality
+document.querySelectorAll('.recipe-card').forEach(card => {
+    if (card.querySelector('.premium-badge')) {
+        const viewBtn = card.querySelector('.btn');
+        viewBtn.addEventListener('click', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                loginModal.style.display = 'block';
+                return;
+            }
+            
+            const userData = JSON.parse(localStorage.getItem('currentUser'));
+            if (!userData.premiumMember) {
+                // Show premium upgrade prompt
+                alert('This is a premium recipe. Please upgrade to access premium content.');
+            } else {
+                // Show recipe (in a real app, navigate to recipe page)
+                alert('Viewing premium recipe: ' + card.querySelector('h3').textContent);
+            }
+        });
+    }
+});
